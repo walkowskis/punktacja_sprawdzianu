@@ -1,0 +1,1 @@
+# punktacja_sprawdzianu
