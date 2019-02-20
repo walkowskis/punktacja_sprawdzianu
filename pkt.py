@@ -39,8 +39,8 @@ def punktacja():
 
 top = Tk()
 #rozmiar i położeni okna
-win_width=500
-win_height=500
+win_width=200
+win_height=200
 screen_width=top.winfo_screenwidth()
 screen_height=top.winfo_screenheight()
 x_pos=(screen_width/2) - (win_width/2)
@@ -49,20 +49,20 @@ top.geometry('%dx%d+%d+%d' % (win_width, win_height, x_pos, y_pos))
 
 top.title("WSO")
 
-L1 = Label(top, text="Punktacja sprawdzianów",).grid(row=0,column=1)
-L2 = Label(top, text="Max punków:",).grid(row=0,column=0)
-L3 = Label(top, text="Celujący",).grid(row=2,column=0)
-L4 = Label(top, text="Bardzo dobry",).grid(row=3,column=0)
-L4 = Label(top, text="Dobry",).grid(row=4,column=0)
-L5 = Label(top, text="Dostateczny",).grid(row=5,column=0)
-L6 = Label(top, text="Dopuszczający",).grid(row=6,column=0)
-L7 = Label(top, text="Niedostateczny", fg='Red', font='Bold').grid(row=7,column=0)
+#L1 = Label(top, text="Punktacja sprawdzianów",).grid(row=0,column=1)
+#L2 = Label(top, text="Max punków:",).grid(row=0,column=0)
+L3 = Label(top, text="Celujący",).grid(row=2, sticky=E)
+L4 = Label(top, text="Bardzo dobry",).grid(row=3, sticky=E)
+L4 = Label(top, text="Dobry",).grid(row=4, sticky=E)
+L5 = Label(top, text="Dostateczny",).grid(row=5,sticky=E)
+L6 = Label(top, text="Dopuszczający",).grid(row=6,sticky=E)
+L7 = Label(top, text="Niedostateczny", fg='Red', font='Bold').grid(row=7,sticky=E)
 
 
 E1 = Entry(top, bd =5)
-E1.grid(row=1,column=3)
+E1.grid(row=9,columnspan=2)
 E1.focus()
 
-B1=Button(top, text ="Punktacja",command = punktacja).grid(row=8,columnspan=2,)
-B2=Button(top, text ="Punktacja opinia",command = punktacja).grid(row=9,column=1,)
+B1=Button(top, text ="Punktacja",command = punktacja).grid(row=10,column=1,)
+B2=Button(top, text ="Punktacja opinia",command = punktacja).grid(row=10,column=0,)
 top.mainloop()
