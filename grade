@@ -1,0 +1,42 @@
+#progi procentowe dla ocen:
+grade = {'cel': 0.98,
+         'bdb': 0.91,
+         'db': 0.76,
+         'dst': 0.51,
+         'dop': 0.31}
+grade_opinia = {'cel': 0.90,
+                'bdb': 0.71,
+                'db': 0.55,
+                'dst': 0.40,
+                'dop': 0.20}
+
+class Punkty:
+    def __init__(self, przecin, maxi, opinia = "brak"):
+        self.przecin=przecin
+        self.maxi=maxi
+        self.opinia = opinia
+
+
+    def widelki(self):
+        if self.opinia == "brak":
+            dictList = []
+            for key, value in grade.items():
+                dictList.append(round((value*int(self.maxi)),self.przecin))
+            return dictList
+        else:
+            dictList = []
+            for key, value in grade_opinia.items():
+                dictList.append(round((value*int(self.maxi)),self.przecin))
+            return dictList
+
+            #y = int(self.maxi)*grade['cel']
+            #z = int(self.maxi)*grade['bdb']
+            #return round(y, self.przecin)
+            #return z, y
+
+
+Spr = Punkty(2, 313, 'jest')
+
+#print(Punkty.widelki(Spr))
+print(Punkty.widelki(Spr)[2])
+
