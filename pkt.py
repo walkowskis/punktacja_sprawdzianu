@@ -2,45 +2,78 @@ try:
     from Tkinter import *
 except ImportError:
     from tkinter import *
-from tkinter import messagebox
+    from tkinter import messagebox
 
-def punktacja():
-    def to_str(x):
-        y=str(round(x, 2))
-        return y
-    try:
-        point=Entry.get(E1)
-        point=int(point)
-        cel=point*0.98
-        bdb=point*0.91
-        db=point*0.76
-        dst=point*0.51
-        dop=point*0.31
-        var1 = StringVar()
-        l_cel = Label(frame_scope, textvariable=var1).grid(row=0, column=0)
-        var1.set(to_str(cel) + ' - ' + to_str(point))
-        var2 = StringVar()
-        l_bdb = Label(frame_scope, textvariable=var2).grid(row=1, column=0)
-        var2.set(to_str(bdb)+' - '+to_str(cel-0.01))
-        var3 = StringVar()
-        l_db = Label(frame_scope, textvariable=var3).grid(row=2, column=0)
-        var3.set(to_str(db)+' - '+to_str(bdb-0.01))
-        var4 = StringVar()
-        l_dst = Label(frame_scope, textvariable=var4).grid(row=3, column=0)
-        var4.set(to_str(dst)+' - '+to_str(db-0.01))
-        var5 = StringVar()
-        l_dop = Label(frame_scope, textvariable=var5).grid(row=4, column=0)
-        var5.set(to_str(dop)+' - '+to_str(dst-0.01))
-        var6 = StringVar()
-        l_ndst = Label(frame_scope, textvariable=var6).grid(row=5, column=0)
-        var6.set(to_str(0)+' - '+to_str(dop-0.01))
-    except ValueError:
-        messagebox.showinfo("Uwaga!","Wprowadź poprawne wartości liczbowe!")
+grade = {'cel': 0.98,
+         'bdb': 0.91,
+         'db': 0.76,
+         'dst': 0.51,
+         'dop': 0.31}
+grade_opinia = {'cel': 0.90,
+                'bdb': 0.71,
+                'db': 0.55,
+                'dst': 0.40,
+                'dop': 0.20}
+
+class Punkty:
+    def __init__(self, przecin, maxi, opinia = "brak"):
+        self.przecin=przecin
+        self.maxi=maxi
+        self.opinia = opinia
+
+    def widelki(self):
+        if self.opinia == "brak":
+            dictList = []
+            for key, value in grade.items():
+                dictList.append(round((value*int(self.maxi)),self.przecin))
+            return dictList
+        else:
+            dictList = []
+            for key, value in grade_opinia.items():
+                dictList.append(round((value*int(self.maxi)),self.przecin))
+            return dictList
+
+            #y = int(self.maxi)*grade['cel']
+            #z = int(self.maxi)*grade['bdb']
+            #return round(y, self.przecin)
+            #return z, y
+
+    def prec(self, ocena):
+        x=1
+        y=10**self.przecin
+        return round((ocena - (x/y)), self.przecin)
+
+class MainFrame(Frame):
+    """Klasa dla jednej
+    z ramek """
+    def __init__(self, my_window):
+        super().__init__()
+        self['relief']=RAISED
+        self['bd']=2
+
+
+
+def licz():
+    Spr = Punkty(w1.get(), Entry.get(E1), 'jest')
+    ocena = Punkty.widelki(Spr)
+    def prec(x):
+        return str(Punkty.prec(Spr, x))
+    var = StringVar()
+    oceny = Label(frame_scope, textvariable=var).grid(row=0, column=0)
+    var.set(
+            str(ocena[0])+' - '+str(Spr.maxi)+'\n'+
+            str(ocena[1])+' - '+prec(ocena[0])+'\n'+
+            str(ocena[2]) + ' - ' + prec(ocena[1])+'\n'+
+            str(ocena[3]) + ' - ' + prec(ocena[2])+'\n'+
+            str(ocena[4]) + ' - ' + prec(ocena[3])+'\n'+
+            '0 - ' + prec(ocena[4])
+            )
 
 master = Tk()
 frame_grade = Frame(master)
-frame_scope = Frame(master, bd=2, relief='solid')
+frame_scope = MainFrame(master)
 frame_set = Frame(master)
+frame_suwak = Frame(master)
 
 #rozmiar i położeni okna
 win_width = 220
@@ -61,16 +94,29 @@ L5 = Label(frame_grade, text="Dostateczny",).grid(row=3,sticky=E)
 L6 = Label(frame_grade, text="Dopuszczający",).grid(row=4,sticky=E)
 L7 = Label(frame_grade, text="Niedostateczny", fg='Red', font='Bold').grid(row=5,sticky=E)
 
+#input max pkt
 E1 = Entry(frame_set, bd =5)
 E1.grid(row=0,columnspan=2)
 E1.focus()
 
-B1 = Button(frame_set, text ="Punktacja",command = punktacja).grid(row=1,column=1,)
-B2 = Button(frame_set, text ="Punktacja opinia",command = punktacja).grid(row=1,column=0,)
+
+
+
+B1 = Button(frame_set, text ="Punktacja",command = licz).grid(row=1,column=1,)
+B2 = Button(frame_set, text ="Punktacja opinia",command = licz).grid(row=1,column=0,)
+
+#dzialanie i umiejscowienie suwaka:
+#var = IntVar()
+w1 = Scale(frame_suwak, from_=0, to=5)
+w1.grid(row=0, column=0)
+
+#suwak = var.get()
+
 
 #ułożenie ramek
 frame_grade.grid(row=0, column=0)
 frame_scope.grid(row=0, column=1)
 frame_set.grid(row=1, columnspan=2)
+frame_suwak.grid(row=0, column=3)
 
 master.mainloop()
