@@ -16,27 +16,25 @@ grade_opinia = {'cel': 0.90,
                 'dop': 0.20}
 
 class Punkty:
-    def __init__(self, przecin, maxi, opinia = "brak"):
+    def __init__(self, przecin, maxi, opinia):
         self.przecin=przecin
         self.maxi=maxi
         self.opinia = opinia
 
     def widelki(self):
-        if self.opinia == "brak":
-            dictList = []
-            for key, value in grade.items():
-                dictList.append(round((value*int(self.maxi)),self.przecin))
-            return dictList
-        else:
-            dictList = []
-            for key, value in grade_opinia.items():
-                dictList.append(round((value*int(self.maxi)),self.przecin))
-            return dictList
-
-            #y = int(self.maxi)*grade['cel']
-            #z = int(self.maxi)*grade['bdb']
-            #return round(y, self.przecin)
-            #return z, y
+        try:
+            if self.opinia == False:
+                dictList = []
+                for key, value in grade.items():
+                    dictList.append(round((value*int(self.maxi)),self.przecin))
+                return dictList
+            else:
+                dictList = []
+                for key, value in grade_opinia.items():
+                    dictList.append(round((value*int(self.maxi)),self.przecin))
+                return dictList
+        except ValueError:
+            messagebox.showinfo("Uwaga!", "Wprowadź poprawną wartość liczbową!")
 
     def prec(self, ocena):
         x=1
@@ -51,10 +49,8 @@ class MainFrame(Frame):
         self['relief']=RAISED
         self['bd']=2
 
-
-
 def licz():
-    Spr = Punkty(w1.get(), Entry.get(E1), 'jest')
+    Spr = Punkty(w1.get(), Entry.get(E1), opinia.get())
     ocena = Punkty.widelki(Spr)
     def prec(x):
         return str(Punkty.prec(Spr, x))
@@ -87,31 +83,28 @@ master.geometry('%dx%d+%d+%d' % (win_width, win_height, x_pos, y_pos))
 master.title("WSO")
 
 #ułożenie w ramce frame_grade
-L3 = Label(frame_grade, text="Celujący",).grid(row=0, sticky=E)
-L4 = Label(frame_grade, text="Bardzo dobry",).grid(row=1, sticky=E)
-L4 = Label(frame_grade, text="Dobry",).grid(row=2, sticky=E)
-L5 = Label(frame_grade, text="Dostateczny",).grid(row=3,sticky=E)
-L6 = Label(frame_grade, text="Dopuszczający",).grid(row=4,sticky=E)
-L7 = Label(frame_grade, text="Niedostateczny", fg='Red', font='Bold').grid(row=5,sticky=E)
+L_marks = Label(frame_grade, text="Celujący\nBardzo dobry\nDobry\nDostateczny\nDopuszczający\nNiedostateczny")
+L_marks.grid(row=0)
+
+var = StringVar()
+oceny = Label(frame_scope, textvariable=var).grid(row=0, column=0)
+var.set('pusto')
 
 #input max pkt
 E1 = Entry(frame_set, bd =5)
 E1.grid(row=0,columnspan=2)
 E1.focus()
 
+B1 = Button(frame_set, text ="Wylicz punktację",command = licz)
+B1.grid(row=1,column=1)
 
-
-
-B1 = Button(frame_set, text ="Punktacja",command = licz).grid(row=1,column=1,)
-B2 = Button(frame_set, text ="Punktacja opinia",command = licz).grid(row=1,column=0,)
+opinia = BooleanVar()
+ChB1 = Checkbutton(frame_set, text='Uczeń z opinią', var=opinia)
+ChB1.grid(row=2, column=1)
 
 #dzialanie i umiejscowienie suwaka:
-#var = IntVar()
 w1 = Scale(frame_suwak, from_=0, to=5)
 w1.grid(row=0, column=0)
-
-#suwak = var.get()
-
 
 #ułożenie ramek
 frame_grade.grid(row=0, column=0)
