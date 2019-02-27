@@ -47,7 +47,11 @@ class MainFrame(Frame):
     def __init__(self, my_window):
         super().__init__()
         self['relief']=RAISED
-        self['bd']=2
+        #self['bd']=2
+        self['padx']=15
+        self['pady']=10
+        self['width']=20
+        self['height']=6
 
 def licz():
     Spr = Punkty(w1.get(), Entry.get(E1), opinia.get())
@@ -55,14 +59,14 @@ def licz():
     def prec(x):
         return str(Punkty.prec(Spr, x))
     var = StringVar()
-    oceny = Label(frame_scope, textvariable=var).grid(row=0, column=0)
+    oceny = Label(LF1, font=("Helvetica", 15), textvariable=var).grid(row=0, column=1)
     var.set(
-            str(ocena[0])+' - '+str(Spr.maxi)+'\n'+
-            str(ocena[1])+' - '+prec(ocena[0])+'\n'+
-            str(ocena[2]) + ' - ' + prec(ocena[1])+'\n'+
-            str(ocena[3]) + ' - ' + prec(ocena[2])+'\n'+
-            str(ocena[4]) + ' - ' + prec(ocena[3])+'\n'+
-            '0 - ' + prec(ocena[4])
+            str(ocena[0])+ '  -  ' +str(Spr.maxi)+'\n'+
+            str(ocena[1])+ '  -  ' +prec(ocena[0])+'\n'+
+            str(ocena[2])+ '  -  ' +prec(ocena[1])+'\n'+
+            str(ocena[3])+ '  -  ' +prec(ocena[2])+'\n'+
+            str(ocena[4])+ '  -  ' +prec(ocena[3])+'\n'+
+            '0  -  ' + prec(ocena[4])
             )
 
 master = Tk()
@@ -72,8 +76,8 @@ frame_set = Frame(master)
 frame_suwak = Frame(master)
 
 #rozmiar i położeni okna
-win_width = 220
-win_height = 200
+win_width = 304
+win_height = 296
 screen_width = master.winfo_screenwidth()
 screen_height = master.winfo_screenheight()
 x_pos = (screen_width/2) - (win_width/2)
@@ -82,34 +86,41 @@ master.geometry('%dx%d+%d+%d' % (win_width, win_height, x_pos, y_pos))
 
 master.title("WSO")
 
+LF1=LabelFrame(frame_scope, labelanchor='n', fg="grey", text="Punktacja sprawdzianu", font=("Helvetica", 8))
+LF1.grid(row=0, column=0)
+
 #ułożenie w ramce frame_grade
-L_marks = Label(frame_grade, text="Celujący\nBardzo dobry\nDobry\nDostateczny\nDopuszczający\nNiedostateczny")
-L_marks.grid(row=0)
+L_marks = Label(LF1,  font=("Helvetica", 15), text="Celujący\nBardzo dobry\nDobry\nDostateczny\nDopuszczający\nNiedostateczny", anchor=E, justify=RIGHT)
+L_marks.grid(row=0, column=0)
 
 var = StringVar()
-oceny = Label(frame_scope, textvariable=var).grid(row=0, column=0)
-var.set('pusto')
+oceny = Label(LF1, width=18, textvariable=var).grid(row=0, column=1)
+var.set('')
+
+labelframe=LabelFrame(frame_set, padx=5, pady=5, labelanchor='n', fg="grey", text="Wpisz liczbę punktów", font=("Helvetica", 8))
+labelframe.grid(row=0, column=0)
 
 #input max pkt
-E1 = Entry(frame_set, bd =5)
-E1.grid(row=0,columnspan=2)
+E1 = Entry(labelframe, bd =4)
+E1.grid(row=0,column=0)
 E1.focus()
 
-B1 = Button(frame_set, text ="Wylicz punktację",command = licz)
-B1.grid(row=1,column=1)
+B1 = Button(labelframe, text ="Wylicz punktację",fg="blue", command = licz)
+B1.grid(row=1,column=0)
 
 opinia = BooleanVar()
-ChB1 = Checkbutton(frame_set, text='Uczeń z opinią', var=opinia)
-ChB1.grid(row=2, column=1)
+ChB1 = Checkbutton(labelframe, text='Uczeń z opinią', var=opinia)
+ChB1.grid(row=2, column=0)
 
 #dzialanie i umiejscowienie suwaka:
-w1 = Scale(frame_suwak, from_=0, to=5)
-w1.grid(row=0, column=0)
+w1 = Scale(labelframe, width=10, length=66, sliderlength=20, activebackground='blue', font=("Helvetica", 9), cursor='double_arrow', from_=0, to=5)
+w1.grid(row=0, rowspan=3, column=1)
+w1.set(1)
 
 #ułożenie ramek
 frame_grade.grid(row=0, column=0)
-frame_scope.grid(row=0, column=1)
-frame_set.grid(row=1, columnspan=2)
-frame_suwak.grid(row=0, column=3)
+frame_scope.grid(row=0, column=0)
+frame_set.grid(row=1, column=0)
+#frame_suwak.grid(row=1, column=1)
 
 master.mainloop()
