@@ -1,1 +1,2 @@
-# Simple program for pupils and teachers helping to set a test score range.
+# Test score helper
+Simple program for pupils and teachers helping to set a test score range.
