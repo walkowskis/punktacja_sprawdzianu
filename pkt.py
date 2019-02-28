@@ -46,8 +46,6 @@ class MainFrame(Frame):
     z ramek """
     def __init__(self, my_window):
         super().__init__()
-        self['relief']=RAISED
-        #self['bd']=2
         self['padx']=15
         self['pady']=10
         self['width']=20
@@ -58,8 +56,6 @@ def licz():
     ocena = Punkty.widelki(Spr)
     def prec(x):
         return str(Punkty.prec(Spr, x))
-    var = StringVar()
-    oceny = Label(LF1, font=("Helvetica", 15), textvariable=var).grid(row=0, column=1)
     var.set(
             str(ocena[0])+ '  -  ' +str(Spr.maxi)+'\n'+
             str(ocena[1])+ '  -  ' +prec(ocena[0])+'\n'+
@@ -94,7 +90,7 @@ L_marks = Label(LF1,  font=("Helvetica", 15), text="Celujący\nBardzo dobry\nDob
 L_marks.grid(row=0, column=0)
 
 var = StringVar()
-oceny = Label(LF1, width=18, textvariable=var).grid(row=0, column=1)
+oceny = Label(LF1, font=("Helvetica", 15), width=12, textvariable=var).grid(row=0, column=1)
 var.set('')
 
 labelframe=LabelFrame(frame_set, padx=5, pady=5, labelanchor='n', fg="grey", text="Wpisz liczbę punktów", font=("Helvetica", 8))
