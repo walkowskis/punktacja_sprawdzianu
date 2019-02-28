@@ -1,1 +1,1 @@
-# punktacja_sprawdzianu
+# Simple program for pupils and teachers helping to set a test score range.
