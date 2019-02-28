@@ -9,41 +9,39 @@ grade = {'cel': 0.98,
          'db': 0.76,
          'dst': 0.51,
          'dop': 0.31}
-grade_opinia = {'cel': 0.90,
+grade_expertise = {'cel': 0.90,
                 'bdb': 0.71,
                 'db': 0.55,
                 'dst': 0.40,
                 'dop': 0.20}
 
-class Punkty:
-    def __init__(self, przecin, maxi, opinia):
-        self.przecin=przecin
-        self.maxi=maxi
-        self.opinia = opinia
+class Point:
+    def __init__(self, precision, max_score, expertise):
+        self.precision=precision
+        self.max_score=max_score
+        self.expertise = expertise
 
-    def widelki(self):
+    def scope(self):
         try:
-            if self.opinia == False:
+            if self.expertise == False:
                 dictList = []
                 for key, value in grade.items():
-                    dictList.append(round((value*int(self.maxi)),self.przecin))
+                    dictList.append(round((value*int(self.max_score)),self.precision))
                 return dictList
             else:
                 dictList = []
-                for key, value in grade_opinia.items():
-                    dictList.append(round((value*int(self.maxi)),self.przecin))
+                for key, value in grade_expertise.items():
+                    dictList.append(round((value*int(self.max_score)),self.precision))
                 return dictList
         except ValueError:
             messagebox.showinfo("Uwaga!", "Wprowadź poprawną wartość liczbową!")
 
-    def prec(self, ocena):
+    def accuracy(self, mark):
         x=1
-        y=10**self.przecin
-        return round((ocena - (x/y)), self.przecin)
+        y=10**self.precision
+        return round((mark - (x/y)), self.precision)
 
 class MainFrame(Frame):
-    """Klasa dla jednej
-    z ramek """
     def __init__(self, my_window):
         super().__init__()
         self['padx']=15
@@ -51,18 +49,18 @@ class MainFrame(Frame):
         self['width']=20
         self['height']=6
 
-def licz():
-    Spr = Punkty(w1.get(), Entry.get(E1), opinia.get())
-    ocena = Punkty.widelki(Spr)
+def calculate():
+    test_set = Point(w1.get(), Entry.get(Input), expertise_var.get())
+    mark = Point.scope(test_set)
     def prec(x):
-        return str(Punkty.prec(Spr, x))
+        return str(Point.accuracy(test_set, x))
     var.set(
-            str(ocena[0])+ '  -  ' +str(Spr.maxi)+'\n'+
-            str(ocena[1])+ '  -  ' +prec(ocena[0])+'\n'+
-            str(ocena[2])+ '  -  ' +prec(ocena[1])+'\n'+
-            str(ocena[3])+ '  -  ' +prec(ocena[2])+'\n'+
-            str(ocena[4])+ '  -  ' +prec(ocena[3])+'\n'+
-            '0  -  ' + prec(ocena[4])
+            str(mark[0])+ '  -  ' +str(test_set.max_score)+'\n'+
+            str(mark[1])+ '  -  ' +prec(mark[0])+'\n'+
+            str(mark[2])+ '  -  ' +prec(mark[1])+'\n'+
+            str(mark[3])+ '  -  ' +prec(mark[2])+'\n'+
+            str(mark[4])+ '  -  ' +prec(mark[3])+'\n'+
+            '0  -  ' + prec(mark[4])
             )
 
 master = Tk()
@@ -83,40 +81,30 @@ master.geometry('%dx%d+%d+%d' % (win_width, win_height, x_pos, y_pos))
 master.title("WSO")
 
 LF1=LabelFrame(frame_scope, labelanchor='n', fg="grey", text="Punktacja sprawdzianu", font=("Helvetica", 8))
-LF1.grid(row=0, column=0)
-
-#ułożenie w ramce frame_grade
 L_marks = Label(LF1,  font=("Helvetica", 15), text="Celujący\nBardzo dobry\nDobry\nDostateczny\nDopuszczający\nNiedostateczny", anchor=E, justify=RIGHT)
-L_marks.grid(row=0, column=0)
-
+LF2=LabelFrame(frame_set, padx=5, pady=5, labelanchor='n', fg="grey", text="Wpisz liczbę punktów", font=("Helvetica", 8))
+Input = Entry(LF2, bd =4)
+Input.focus()
 var = StringVar()
 oceny = Label(LF1, font=("Helvetica", 15), width=12, textvariable=var).grid(row=0, column=1)
 var.set('')
-
-labelframe=LabelFrame(frame_set, padx=5, pady=5, labelanchor='n', fg="grey", text="Wpisz liczbę punktów", font=("Helvetica", 8))
-labelframe.grid(row=0, column=0)
-
-#input max pkt
-E1 = Entry(labelframe, bd =4)
-E1.grid(row=0,column=0)
-E1.focus()
-
-B1 = Button(labelframe, text ="Wylicz punktację",fg="blue", command = licz)
-B1.grid(row=1,column=0)
-
-opinia = BooleanVar()
-ChB1 = Checkbutton(labelframe, text='Uczeń z opinią', var=opinia)
-ChB1.grid(row=2, column=0)
-
-#dzialanie i umiejscowienie suwaka:
-w1 = Scale(labelframe, width=10, length=66, sliderlength=20, activebackground='blue', font=("Helvetica", 9), cursor='double_arrow', from_=0, to=5)
-w1.grid(row=0, rowspan=3, column=1)
+B1 = Button(LF2, text ="Wylicz punktację",fg="blue", command = calculate)
+expertise_var = BooleanVar()
+ChB1 = Checkbutton(LF2, text='Uczeń z opinią', var=expertise_var)
+w1 = Scale(LF2, width=10, length=66, sliderlength=20, activebackground='blue', font=("Helvetica", 9), cursor='double_arrow', from_=0, to=5)
 w1.set(1)
+
+LF1.grid(row=0, column=0)
+L_marks.grid(row=0, column=0)
+LF2.grid(row=0, column=0)
+Input.grid(row=0,column=0)
+B1.grid(row=1,column=0)
+ChB1.grid(row=2, column=0)
+w1.grid(row=0, rowspan=3, column=1)
 
 #ułożenie ramek
 frame_grade.grid(row=0, column=0)
 frame_scope.grid(row=0, column=0)
 frame_set.grid(row=1, column=0)
-#frame_suwak.grid(row=1, column=1)
 
 master.mainloop()
